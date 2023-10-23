@@ -127,11 +127,13 @@ watch(isTyping, isTyping => {
 	});
 });
 
+const textarea = ref<HTMLTextAreaElement | null>(null);
 const submit = () => {
 	if (messageForm.content.length === 0) return;
 	messageForm.post(route('directMessages.store', props.user.id), {
 		onSuccess: () => {
 			messageForm.reset();
+			textarea.value?.focus();
 		}
 	});
 };
