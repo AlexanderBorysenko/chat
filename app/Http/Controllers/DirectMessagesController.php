@@ -63,6 +63,6 @@ class DirectMessagesController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect()->away('https://www.google.com/');
+        return redirect()->route('exit');
     }
 }

@@ -28,6 +28,7 @@
 <script setup lang="ts">
 import { Link, router } from '@inertiajs/vue3';
 import { BxLogOut, BxChat } from '@kalimahapps/vue-icons';
+import { onUnmounted } from 'vue';
 import { onMounted } from 'vue';
 import { ref } from 'vue';
 
@@ -44,9 +45,28 @@ const erase = () => {
 	router.post(route('directMessages.erase'));
 };
 
-const viewportHeight = ref('100vh');
+const keydownListener = (e: KeyboardEvent) => {
+	if ((e.ctrlKey && e.key === 'q') || (e.metaKey && e.key === 'q')) {
+		logout();
+	}
+};
 onMounted(() => {
+	window.addEventListener('keydown', keydownListener);
+});
+onUnmounted(() => {
+	window.removeEventListener('keydown', keydownListener);
+});
+
+const viewportHeight = ref('100vh');
+const resizeListener = () => {
 	viewportHeight.value = `${window.innerHeight}px`;
+};
+onMounted(() => {
+	resizeListener();
+	window.addEventListener('resize', resizeListener);
+});
+onUnmounted(() => {
+	window.removeEventListener('resize', resizeListener);
 });
 </script>
 
@@ -56,6 +76,9 @@ onMounted(() => {
 	height: 100vh;
 	height: v-bind(viewportHeight);
 	padding: 4px;
+	background: url(../../asset-images/background.jpg) no-repeat center center
+		fixed;
+	background-size: cover;
 }
 .header {
 	padding: 8px;

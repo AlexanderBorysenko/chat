@@ -7,4 +7,10 @@
 	background-color: #fff;
 	background-clip: padding-box;
 	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+	&:focus {
+		background-color: #fff;
+		border-color: #f8f8ff;
+		outline: 0;
+		box-shadow: 0 0 0 0.2rem rgba(248, 248, 255, 0.25);
+	}
 }

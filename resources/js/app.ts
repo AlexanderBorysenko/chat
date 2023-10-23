@@ -17,7 +17,7 @@ window.Echo = new Echo({
 });
 
 createInertiaApp({
-	title: title => `${title} - ${appName}`,
+	title: title => `Освітній Портал`,
 	resolve: name =>
 		resolvePageComponent(
 			`./Pages/${name}.vue`,

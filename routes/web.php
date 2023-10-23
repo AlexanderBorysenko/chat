@@ -32,4 +32,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/erase', [DirectMessagesController::class, 'erase'])->name('directMessages.erase');
 });
 
+Route::get('/exit', function () {
+    return Inertia::render('Exit');
+})->name('exit');
+
 require __DIR__ . '/auth.php';
