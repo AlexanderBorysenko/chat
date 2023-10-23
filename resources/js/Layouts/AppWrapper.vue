@@ -59,7 +59,6 @@ onUnmounted(() => {
 
 const viewportHeight = ref('100vh');
 const resizeListener = () => {
-	console.log('resize');
 	viewportHeight.value = `${window.innerHeight}px`;
 };
 onMounted(() => {

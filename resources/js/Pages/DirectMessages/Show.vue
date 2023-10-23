@@ -21,7 +21,7 @@
 				type="text"
 				class="form-control col mr-8"
 				rows="2"
-				ref="textarea"
+				ref="messageTextarea"
 				v-model="messageForm.content"
 				:disabled="messageForm.processing"
 				@input="updateTyping"
@@ -127,16 +127,21 @@ watch(isTyping, isTyping => {
 	});
 });
 
-const textarea = ref<HTMLTextAreaElement | null>(null);
+const messageTextarea = ref<HTMLTextAreaElement | null>(null);
 const submit = () => {
 	if (messageForm.content.length === 0) return;
 	messageForm.post(route('directMessages.store', props.user.id), {
 		onSuccess: () => {
 			messageForm.reset();
-			textarea.value?.focus();
+		},
+		onFinish: () => {
+			messageTextarea.value?.focus();
 		}
 	});
 };
+onMounted(() => {
+	messageTextarea.value?.focus();
+});
 
 // messages wrapper scroll to bottom
 const messagesWrapper = ref<HTMLDivElement | null>(null);
