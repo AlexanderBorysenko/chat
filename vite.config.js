@@ -8,7 +8,21 @@ export default defineConfig({
 	plugins: [
 		sassGlobImports(),
 		cssPurge({
-			content: ['resources/**/*.vue', 'resources/views/**/*.blade.php']
+			contentFunction: sourceInputFile => {
+				if (vuePath.test(sourceInputFile)) {
+					return [sourceInputFile.replace(vuePath, '.vue')];
+				}
+				return [
+					'resources/js/**/*.vue',
+					'resources/views/**/*.blade.php'
+				];
+			},
+			defaultExtractor(content) {
+				if (content.startsWith('<template')) {
+					content = `${content.split('</template')[0]}</template>`;
+				}
+				return content.match(/[\w-/:]+(?<!:)/g) || [];
+			}
 		}),
 		laravel({
 			input: 'resources/js/app.ts',
