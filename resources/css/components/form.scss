@@ -1,0 +1,10 @@
+.form-control {
+	display: block;
+	border: 1px solid #f8f8ff;
+	border-radius: 0.25rem;
+	padding: 0.5rem 0.75rem;
+	line-height: 1.5;
+	background-color: #fff;
+	background-clip: padding-box;
+	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}

@@ -1,0 +1,224 @@
+$default-gap: 1.25rem;
+
+.hidden {
+	display: none;
+}
+.block {
+	display: block;
+}
+.visible {
+	display: block;
+}
+
+.relative {
+	position: relative;
+}
+.w-100 {
+	width: 100%;
+}
+.w-fit-content {
+	width: fit-content;
+}
+.h-100 {
+	height: 100%;
+}
+
+.h-100vh {
+	height: 100vh;
+}
+
+[class*='flex'] {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.flex-column {
+	flex-direction: column;
+}
+
+.flex-row {
+	flex-wrap: wrap;
+	--col-gap: #{$default-gap};
+	--row-gap: #{$default-gap};
+
+	&.flex-stretch {
+		& > * {
+			height: 100%;
+		}
+	}
+}
+
+.flex-overflow-wrapper {
+	overflow: hidden;
+}
+
+.flex-centered {
+	justify-content: center;
+	align-items: center;
+}
+.align-stretch {
+	align-items: stretch;
+}
+.align-start {
+	align-items: start;
+}
+.align-self-start {
+	align-self: start;
+}
+.align-center {
+	align-items: center;
+}
+.align-self-center {
+	align-self: center;
+}
+.align-end {
+	align-items: end;
+}
+.align-self-end {
+	align-self: end;
+}
+.justify-start {
+	justify-content: start;
+}
+.justify-self-start {
+	justify-self: start;
+}
+.justify-center {
+	justify-content: center;
+}
+.justify-self-center {
+	justify-self: center;
+}
+.justify-end {
+	justify-content: end;
+}
+.justify-self-end {
+	justify-self: end;
+}
+.justify-space-between {
+	justify-content: space-between;
+}
+
+.justify-space-around {
+	justify-content: space-around;
+}
+
+$col-width: calc(100% / 12);
+.col {
+	flex: 1;
+}
+
+@for $i from 1 through 12 {
+	.col-#{$i} {
+		width: calc(#{$col-width} * #{$i} - var(--col-gap));
+	}
+}
+
+.reset-order {
+	order: unset;
+}
+.first-col {
+	order: -1;
+}
+.last-col {
+	order: 1;
+}
+
+[class*='g-layout'],
+
+// start admin style
+[class*='g-layout']>.block-editor-inner-blocks>.block-editor-block-list__layout
+// end admin style
+{
+	display: grid;
+	grid-template-columns: repeat(12, 1fr);
+	gap: $default-gap;
+	grid-column-gap: $default-gap;
+	grid-row-gap: $default-gap;
+	grid-auto-flow: dense;
+}
+
+@mixin layout-media-content($breakpoint: '') {
+	@if $breakpoint != '' {
+		$breakpoint: -#{$breakpoint};
+	}
+
+	.hidden#{$breakpoint} {
+		display: none;
+	}
+	.visible#{$breakpoint} {
+		display: block;
+	}
+	@for $i from 1 through 12 {
+		.col#{$breakpoint}-#{$i} {
+			width: calc(#{$col-width} * #{$i} - var(--col-gap));
+		}
+	}
+	.#{$breakpoint}-first-col {
+		order: -1;
+	}
+	.#{$breakpoint}-last-col {
+		order: 1;
+	}
+	.#{$breakpoint}-reset-order {
+		order: unset;
+	}
+
+	@for $i from 1 through 12 {
+		.g#{$breakpoint}-col-#{$i} {
+			grid-column: span $i;
+		}
+		.g#{$breakpoint}-col-start-#{$i} {
+			grid-column-start: #{$i};
+		}
+		.g#{$breakpoint}-col-end-#{$i} {
+			grid-column-end: #{$i};
+		}
+	}
+	.g#{$breakpoint}-col-end-13 {
+		grid-column-end: 13;
+	}
+
+	@for $i from 0 through 10 {
+		$gap: $i * 0.5;
+		$gap: #{$gap}rem;
+		@each $direction in ('', '-h', '-v') {
+			.gap#{$direction}#{$breakpoint}-#{$i},
+			
+			// start admin style
+			.gap#{$direction}#{$breakpoint}-#{$i}>.block-editor-inner-blocks>.block-editor-block-list__layout
+			// end admin style
+			{
+				@if $direction == '' {
+					gap: $gap;
+					--col-gap: $gap;
+					--row-gap: $gap;
+				} @else if $direction == '-h' {
+					grid-column-gap: $gap;
+					--col-gap: $gap;
+				} @else if $direction == '-v' {
+					grid-row-gap: $gap;
+					--row-gap: $gap;
+				}
+			}
+		}
+	}
+}
+.gap-12px {
+	gap: 12px;
+	--col-gap: 12px;
+	--row-gap: 12px;
+}
+@include layout-media-content();
+
+@each $breakpoint, $breakpointWidth in $breakpoints {
+	@media (max-width: $breakpointWidth) {
+		@include layout-media-content($breakpoint);
+	}
+}
+
+.sticky {
+	position: sticky;
+	top: 0;
+	z-index: 999;
+}

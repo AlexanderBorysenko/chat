@@ -1,0 +1,39 @@
+@import '../variables.scss';
+
+$fontSizes: (
+	'0-875': 0.875rem,
+	'1': 1rem,
+	'1-125': 1.125rem,
+	'1-25': 1.25rem,
+	'1-5': 1.5rem,
+	'1-75': 1.75rem,
+	'2': 2rem,
+	'2-25': 2.25rem,
+	'2-5': 2.5rem,
+	'2-75': 2.75rem,
+	'3': 3rem,
+	'3-5': 3.5rem,
+	'4-5': 4.5rem
+);
+
+@mixin fontSizeClass($key, $value, $breakpoint: '') {
+	@if $breakpoint != '' {
+		$breakpoint: '-#{$breakpoint}';
+	}
+
+	.fs#{$breakpoint}-#{$key} {
+		font-size: $value;
+	}
+}
+
+@each $key, $value in $fontSizes {
+	@include fontSizeClass($key, $value);
+}
+
+@each $breakpoint, $breakpointWidth in $breakpoints {
+	@media (max-width: $breakpointWidth) {
+		@each $key, $value in $fontSizes {
+			@include fontSizeClass($key, $value, $breakpoint);
+		}
+	}
+}

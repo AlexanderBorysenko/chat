@@ -1,0 +1,33 @@
+$colors: (
+	'midnight-blue': #191970,
+	'dark-slate-gray': #2f4f4f,
+	'dim-gray': #696969,
+	'rosy-brown': #bc8f8f,
+	'light-slate-gray': #778899,
+	'thistle': #d8bfd8
+);
+
+@mixin colorClassesSet($key, $value) {
+	.background-#{$key} {
+		background: #{$value};
+
+		&--on-hover {
+			&:hover {
+				background: #{$value};
+			}
+		}
+	}
+	.color-#{$key} {
+		color: #{$value};
+
+		&--on-hover {
+			&:hover {
+				color: #{$value};
+			}
+		}
+	}
+}
+
+@each $color, $value in $colors {
+	@include colorClassesSet($color, $value);
+}

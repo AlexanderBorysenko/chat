@@ -1,0 +1,23 @@
+$container-width: 1380px;
+$container-lg-width: 1552px;
+$container-slim-width: 1149px;
+$container-padding: 1rem;
+
+$large-desktop-width: 1600px;
+$small-desktop-width: 1300px;
+$tablet-width: 1000px;
+$large-mobile-width: 768px;
+$mobile-width: 400px;
+$breakpoints: (
+	'ldw': $large-desktop-width,
+	'sdw': $small-desktop-width,
+	'tw': $tablet-width,
+	'lmw': $large-mobile-width,
+	'mw': $mobile-width
+);
+
+$form-field-padding-vertical: 0.625rem;
+$form-field-padding-horizontal: 1.5rem;
+
+$header-height: 72px;
+$header-mobile-height: 44px;

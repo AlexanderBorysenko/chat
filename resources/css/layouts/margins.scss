@@ -1,0 +1,67 @@
+$directions: ('t', 'b', 'l', 'r');
+$margins: (0, 8, 16, 24, 32, 40, 56, 72, 80, 108, 172);
+
+@mixin marginPropertiesByDirection($value, $direction) {
+	@if $direction == 't' {
+		margin-top: #{$value}px !important;
+	} @else if $direction == 'b' {
+		margin-bottom: #{$value}px !important;
+	} @else if $direction == 'l' {
+		margin-left: #{$value}px !important;
+	} @else if $direction == 'r' {
+		margin-right: #{$value}px !important;
+	}
+}
+@mixin marginClassesSet($key, $value, $breakpoint: '') {
+	@if $breakpoint != '' {
+		$breakpoint: '-#{$breakpoint}';
+	}
+
+	@each $direction in $directions {
+		.m#{$direction}#{$breakpoint}-#{$key} {
+			@include marginPropertiesByDirection($value, $direction);
+		}
+	}
+}
+
+@each $margin in $margins {
+	@include marginClassesSet($margin, $margin);
+}
+
+.mt-auto {
+	margin-top: auto !important;
+}
+.mb-auto {
+	margin-bottom: auto !important;
+}
+.ml-auto {
+	margin-left: auto !important;
+}
+.mr-auto {
+	margin-right: auto !important;
+}
+
+@each $breakpoint, $breakpointWidth in $breakpoints {
+	@media (max-width: $breakpointWidth) {
+		@each $margin in $margins {
+			@include marginClassesSet($margin, $margin, $breakpoint);
+		}
+
+		.mt-#{$breakpoint}-auto {
+			margin-top: auto !important;
+		}
+		.mb-#{$breakpoint}-auto {
+			margin-bottom: auto !important;
+		}
+		.ml-#{$breakpoint}-auto {
+			margin-left: auto !important;
+		}
+		.mr-#{$breakpoint}-auto {
+			margin-right: auto !important;
+		}
+	}
+}
+
+.mb-last-child-0:last-child {
+	margin-bottom: 0 !important;
+}

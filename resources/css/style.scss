@@ -1,0 +1,38 @@
+@import './reset.scss';
+@import './variables.scss';
+@import './colors.scss';
+@import './border.scss';
+
+@import './fonts.scss';
+
+@import './components/**/*.scss';
+@import './typography/**/*.scss';
+@import './layouts/**/*.scss';
+
+#app {
+	height: 100%;
+}
+html {
+	@media (max-width: $tablet-width) {
+		font-size: 14px;
+	}
+	font-weight: 400;
+	scroll-behavior: smooth;
+}
+body {
+	font-family: 'Inter', sans-serif;
+	height: 100%;
+	line-height: 1.33;
+	overflow-x: clip;
+	color: #3f2c2c;
+	background: url(../asset-images/background.jpg) no-repeat center center
+		fixed;
+	background-size: cover;
+	* {
+		line-height: inherit;
+	}
+}
+a:not([class]) {
+	color: #c6922e;
+	text-decoration-line: underline;
+}
