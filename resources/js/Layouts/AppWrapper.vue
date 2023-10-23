@@ -28,6 +28,8 @@
 <script setup lang="ts">
 import { Link, router } from '@inertiajs/vue3';
 import { BxLogOut, BxChat } from '@kalimahapps/vue-icons';
+import { onMounted } from 'vue';
+import { ref } from 'vue';
 
 const logout = () => {
 	const html = document.querySelector('html');
@@ -41,12 +43,18 @@ const erase = () => {
 
 	router.post(route('directMessages.erase'));
 };
+
+const viewportHeight = ref('100vh');
+onMounted(() => {
+	viewportHeight.value = `${window.innerHeight}px`;
+});
 </script>
 
 <style scoped lang="scss">
 .app-wrapper {
 	width: 100%;
 	height: 100vh;
+	height: v-bind(viewportHeight);
 	padding: 4px;
 }
 .header {
