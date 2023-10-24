@@ -7,7 +7,6 @@
 					:key="message.id"
 					:message="message"
 					:isMine="message.sender_id === auth.user.id"
-					@vue:mounted="scrollToView"
 				/>
 			</TransitionGroup>
 		</div>
@@ -48,7 +47,6 @@ import { IoOutlinePaw } from '@kalimahapps/vue-icons';
 import axios from 'axios';
 import { watch } from 'vue';
 import { toRef } from 'vue';
-import { toRefs } from 'vue';
 import { onUnmounted } from 'vue';
 import { onMounted } from 'vue';
 import { ref } from 'vue';
@@ -87,7 +85,7 @@ const channel = ref<ReturnType<typeof window.Echo.private> | null>(null);
 
 onMounted(() => {
 	readMessages();
-
+	scrollToView();
 	channel.value = window.Echo.private(
 		`directMessages.${props.user.id + auth.user.id}`
 	);
@@ -98,20 +96,24 @@ onMounted(() => {
 				readMessages();
 			}
 		})
-		.listen('ReadUserMessages', (e: { user: TUser }) => {
-			props.messages.forEach(message => {
-				message.read = true;
-			});
-		})
+		.listen(
+			'ReadUserMessages',
+			(e: { user: TUser; readingUser: TUser }) => {
+				props.messages.forEach(message => {
+					if (e.readingUser.id === props.user.id) {
+						message.read = true;
+					}
+				});
+			}
+		)
 		.listenForWhisper(
 			`User.${props.user.id}.typing`,
 			(e: { isTyping: boolean }) => {
 				isNyamNyamTyping.value = e.isTyping;
-				scrollToView();
 			}
 		);
 });
-// stop listening on unmount
+
 onUnmounted(() => {
 	channel.value
 		?.stopListening('NewDirectMessage')

@@ -19,9 +19,11 @@ class ReadUserMessages implements ShouldBroadcast
      * Create a new event instance.
      */
     public $user;
+    public $readingUser;
     public function __construct(User $user)
     {
         $this->user = $user;
+        $this->readingUser = auth()->user();
     }
 
     /**
