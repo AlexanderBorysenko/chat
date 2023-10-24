@@ -50,8 +50,8 @@ class User extends Authenticatable
 
     public function currentUserChat()
     {
-        // return all messages where sender_id is current user or receiver_id is current user, order by created_at
-        return $this->messages()->with('sender')->where('sender_id', auth()->id())->orWhere('receiver_id', auth()->id())->orderBy('created_at');
+        // return all messages where sender_id is current user Id and receiver_id is $the user id or where sender_id is $the user id and receiver_id is current user Id
+        return $this->hasMany(Message::class, 'sender_id')->where('receiver_id', auth()->id())->orWhere('sender_id', auth()->id())->where('receiver_id', $this->id);
     }
 
     public function currentUserUnreadMessages()
