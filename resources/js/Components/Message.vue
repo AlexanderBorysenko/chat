@@ -1,6 +1,6 @@
 <template>
 	<div class="message pv-8 ph-12" :class="{ 'is-mine': isMine }">
-		{{ message.content }}
+		<div v-html="message.content"></div>
 		<p class="date" v-if="!isMine">
 			{{ new Date(message.created_at).toLocaleString() }} -
 		</p>
