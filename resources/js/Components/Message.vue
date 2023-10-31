@@ -8,7 +8,7 @@
 			class="btn ml-auto w-100 text-center flex align-center justify-center"
 			@click="isContentVisible = !isContentVisible"
 		>
-			{{ isContentVisible ? 'Сховати' : 'Показати' }}
+			{{ isContentVisible ? 'Сховати Моську' : 'Показати Моську' }}
 		</button>
 		<div
 			v-html="message.content"
@@ -65,7 +65,6 @@ const isContentVisible = ref(false);
 	// background: rgba(255, 225, 250, 0.7);
 	// color: rgba($color: #3f2c2c, $alpha: 0.5);
 	margin-left: auto;
-	padding-bottom: 8px;
 	text-align: right;
 	&:not(:last-child) {
 		.date {
