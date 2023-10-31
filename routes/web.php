@@ -35,7 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/erase', [DirectMessagesController::class, 'erase'])->name('directMessages.erase');
 
     // uploads
-    Route::get('/uploads/{filename}', [UploadsContorller::class, 'show'])->name('upload.show');
+    Route::get('/uploads', [UploadsContorller::class, 'show'])->name('upload.show');
 });
 
 Route::get('/exit', function () {

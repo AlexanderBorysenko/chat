@@ -7,8 +7,9 @@ use Illuminate\Http\Request;
 class UploadsContorller extends Controller
 {
     // load media file from storage/app/uploads
-    public function show($filename)
+    public function show(Request $request)
     {
+        $filename = $request->filename;
         $path = storage_path('app/uploads/' . $filename);
         if (!file_exists($path)) {
             abort(404);

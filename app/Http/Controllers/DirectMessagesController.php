@@ -113,7 +113,7 @@ class DirectMessagesController extends Controller
             }
             $img->save(storage_path('app/uploads/' . $fileName));
 
-            $message['content'] = '<img src="' . route('upload.show', $fileName) . '" alt="image" loading="lazy"/>';
+            $message['content'] = '<img src="/uploads?filename=' . $fileName . '" alt="image" loading="lazy"/>';
         }
 
         if (in_array($file->getClientOriginalExtension(), ['mp4', 'mov'])) {
@@ -137,7 +137,7 @@ class DirectMessagesController extends Controller
                 $file->move(storage_path('app/uploads/'), $fileName);
             }
 
-            $message['content'] = '<video controls="controls" muted><source src="' . route('upload.show', $fileName) . '" type="video/mp4"></video>';
+            $message['content'] = '<video controls="controls" muted><source src="/uploads?filename=' . $fileName . '" type="video/mp4"></video>';
         }
 
         $storedMessage = Message::create($message);
