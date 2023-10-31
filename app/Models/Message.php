@@ -15,6 +15,7 @@ class Message extends Model
         'receiver_id',
         'content',
         'read',
+        'type',
     ];
 
     // cast created_at to datetime

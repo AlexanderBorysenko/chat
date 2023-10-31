@@ -80,6 +80,7 @@ class DirectMessagesController extends Controller
             'content' => 'Формат файла не підтримується',
             'sender_id' => auth()->id(),
             'receiver_id' => $user->id,
+            'type' => 'media',
         ];
 
         if (file_exists(storage_path('app/uploads/' . $file->getClientOriginalName()))) {
@@ -136,12 +137,12 @@ class DirectMessagesController extends Controller
             } else {
                 $file->move(storage_path('app/uploads/'), $fileName);
             }
+            ob_start();
 
             $message['content'] = '<video controls="controls" muted><source src="/uploads?filename=' . $fileName . '" type="video/mp4"></video>';
         }
 
         $storedMessage = Message::create($message);
-
         broadcast(new NewDirectMessage($storedMessage))->toOthers();
         return back();
     }

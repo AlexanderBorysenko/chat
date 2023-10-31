@@ -1,8 +1,31 @@
 <template>
-	<div class="message pv-8 ph-12" :class="{ 'is-mine': isMine }">
+	<div
+		class="message"
+		v-if="message.type === 'media'"
+		:class="{ 'is-mine': isMine }"
+	>
+		<button
+			class="btn ml-auto w-100 text-center flex align-center justify-center"
+			@click="isContentVisible = !isContentVisible"
+		>
+			{{ isContentVisible ? 'Сховати' : 'Показати' }}
+		</button>
+		<div
+			v-html="message.content"
+			v-if="isContentVisible"
+			class="lh-0"
+		></div>
+		<p class="date" v-if="!isMine">
+			{{ new Date(message.created_at).toLocaleString() }}
+		</p>
+		<p class="date" v-if="isMine">
+			{{ message.read ? 'Прочитано' : 'Не прочитано' }}
+		</p>
+	</div>
+	<div class="message pv-8 ph-12" v-else :class="{ 'is-mine': isMine }">
 		<div v-html="message.content"></div>
 		<p class="date" v-if="!isMine">
-			{{ new Date(message.created_at).toLocaleString() }} -
+			{{ new Date(message.created_at).toLocaleString() }}
 		</p>
 		<p class="date" v-if="isMine">
 			{{ message.read ? 'Прочитано' : 'Не прочитано' }}
@@ -12,11 +35,14 @@
 
 <script setup lang="ts">
 import { TMessage } from '@/types/TMessage';
+import { ref } from 'vue';
 
 const props = defineProps<{
 	message: TMessage;
 	isMine: boolean;
 }>();
+
+const isContentVisible = ref(false);
 </script>
 
 <style scoped lang="scss">
@@ -40,7 +66,6 @@ const props = defineProps<{
 	// color: rgba($color: #3f2c2c, $alpha: 0.5);
 	margin-left: auto;
 	padding-bottom: 8px;
-	opacity: 0.4;
 	text-align: right;
 	&:not(:last-child) {
 		.date {

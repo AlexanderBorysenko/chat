@@ -5,4 +5,5 @@ export type TMessage = {
 	content: string;
 	read: boolean;
 	created_at: string;
+	type: 'text' | 'media';
 };
