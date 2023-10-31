@@ -52,7 +52,6 @@ const isContentVisible = ref(false);
 	background: rgba($color: #fff, $alpha: 0.8);
 	border-radius: 4px;
 	position: relative;
-	padding-bottom: 16px;
 	line-height: 130%;
 	&:not(:last-child) {
 		margin-bottom: 8px;
