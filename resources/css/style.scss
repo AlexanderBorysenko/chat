@@ -9,6 +9,7 @@
 @import './typography/**/*.scss';
 @import './layouts/**/*.scss';
 
+/*! purgecss start ignore */
 #app {
 	height: 100%;
 }
@@ -35,3 +36,4 @@ a:not([class]) {
 video {
 	max-width: 100%;
 }
+/*! purgecss end ignore */
