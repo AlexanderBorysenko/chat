@@ -16,6 +16,20 @@
 					>Жамкає Лапкою...</span
 				>
 			</Transition>
+			<input
+				type="file"
+				class="btn hidden"
+				ref="mediaFileInput"
+				:disabled="mediaFileForm.processing"
+				@change="onMediaFileInputChange"
+			/>
+			<button
+				class="btn lh-0 mr-8"
+				@click="mediaFileInput?.click()"
+				:disabled="mediaFileForm.processing"
+			>
+				<BxCamera class="fs-2" />
+			</button>
 			<textarea
 				type="text"
 				class="form-control col mr-8"
@@ -30,8 +44,7 @@
 				@click="submit"
 				:disabled="messageForm.processing"
 			>
-				<IoOutlinePaw class="fs-2 mr-8" />
-				Жамк
+				<IoOutlinePaw class="fs-2" />
 			</button>
 		</div>
 	</AppWrapper>
@@ -44,6 +57,7 @@ import { TMessage } from '@/types/TMessage';
 import { TUser } from '@/types/TUser';
 import { useForm, usePage } from '@inertiajs/vue3';
 import { IoOutlinePaw } from '@kalimahapps/vue-icons';
+import { BxCamera } from '@kalimahapps/vue-icons';
 import axios from 'axios';
 import { watch } from 'vue';
 import { toRef } from 'vue';
@@ -67,6 +81,61 @@ const messageForm = useForm({
 	content: ''
 });
 
+const messagesWrapper = ref<HTMLDivElement | null>(null);
+const scrollToView = () => {
+	setTimeout(() => {
+		if (messagesWrapper.value) {
+			messagesWrapper.value.scrollTop =
+				messagesWrapper.value.scrollHeight;
+		}
+	}, 100);
+};
+
+const messageTextarea = ref<HTMLTextAreaElement | null>(null);
+const submit = () => {
+	if (messageForm.content.length === 0) return;
+	messageForm.post(route('directMessages.store', props.user.id), {
+		onSuccess: () => {
+			messageForm.reset();
+		},
+		onFinish: () => {
+			messageTextarea.value?.focus();
+		}
+	});
+};
+onMounted(() => {
+	messageTextarea.value?.focus();
+	scrollToView();
+});
+
+const mediaFileInput = ref<HTMLInputElement | null>(null);
+const mediaFileForm = useForm<{
+	file: File | null;
+}>({
+	file: null
+});
+const onMediaFileInputChange = (e: Event) => {
+	const target = e.target as HTMLInputElement;
+	if (target.files) {
+		mediaFileForm.file = target.files[0];
+	}
+	submitMediaFile();
+};
+const submitMediaFile = () => {
+	if (!mediaFileForm.file) return;
+	mediaFileForm.post(
+		route('directMessages.storeMediaFileMessage', props.user.id),
+		{
+			onSuccess: () => {
+				mediaFileForm.reset();
+			},
+			onError: data => {
+				alert(data.file);
+			}
+		}
+	);
+};
+
 const isTyping = ref(false);
 const typingTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
 const updateTyping = () => {
@@ -85,7 +154,6 @@ const channel = ref<ReturnType<typeof window.Echo.private> | null>(null);
 
 onMounted(() => {
 	readMessages();
-	scrollToView();
 	channel.value = window.Echo.private(
 		`directMessages.${props.user.id + auth.user.id}`
 	);
@@ -128,30 +196,6 @@ watch(isTyping, isTyping => {
 		isTyping
 	});
 });
-
-const messageTextarea = ref<HTMLTextAreaElement | null>(null);
-const submit = () => {
-	if (messageForm.content.length === 0) return;
-	messageForm.post(route('directMessages.store', props.user.id), {
-		onSuccess: () => {
-			messageForm.reset();
-		},
-		onFinish: () => {
-			messageTextarea.value?.focus();
-		}
-	});
-};
-onMounted(() => {
-	messageTextarea.value?.focus();
-});
-
-// messages wrapper scroll to bottom
-const messagesWrapper = ref<HTMLDivElement | null>(null);
-const scrollToView = () => {
-	if (messagesWrapper.value) {
-		messagesWrapper.value.scrollTop = messagesWrapper.value.scrollHeight;
-	}
-};
 
 // submit if single enter pressed
 const submitIfSingleEnterPressed = (e: KeyboardEvent) => {
