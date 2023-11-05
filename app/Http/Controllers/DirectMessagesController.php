@@ -125,7 +125,10 @@ class DirectMessagesController extends Controller
                 $srcFile = storage_path('app/uploads/' . $fileName);
 
                 // Open the video file
-                $ffmpeg = \FFMpeg\FFMpeg::create();
+                $ffmpeg = \FFMpeg\FFMpeg::create([
+                    'ffmpeg.binaries' => '/usr/bin/ffmpeg',
+                    'ffprobe.binaries' => '/usr/bin/ffprobe'
+                ]);
                 $video = $ffmpeg->open($srcFile);
                 $format = new \FFMpeg\Format\Video\X264();
                 $format->setAudioCodec("libmp3lame")->setKiloBitrate(0);
