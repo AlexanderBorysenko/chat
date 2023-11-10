@@ -162,6 +162,15 @@ class DirectMessagesController extends Controller
     {
         Message::truncate();
 
+        // delete all files in the uploads folder
+        $files = glob(storage_path('app/uploads/*'));
+
+        foreach ($files as $file) {
+            if (is_file($file)) {
+                unlink($file);
+            }
+        }
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
