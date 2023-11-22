@@ -48,6 +48,9 @@ class DirectMessagesController extends Controller
                 $doc = new \DOMDocument();
                 @$doc->loadHTML($html);
                 $nodes = $doc->getElementsByTagName('title');
+                if ($nodes->length == 0) {
+                    return '<a href="' . $url . '" target="_blank">Посиланнячко</a>';
+                }
                 $title = $nodes->item(0)->nodeValue;
                 return '<a href="' . $url . '" target="_blank">' . $title . '</a>';
             },
