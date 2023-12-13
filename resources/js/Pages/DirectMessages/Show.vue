@@ -121,6 +121,24 @@ const onMediaFileInputChange = (e: Event) => {
 	}
 	submitMediaFile();
 };
+
+// following code will listen to paste event on textarea and will put clipboard file into mediaFileForm.file if there is a file in clipboard and submit it
+const onPaste = (e: ClipboardEvent) => {
+	const items = e.clipboardData?.items;
+	if (!items) return;
+	for (let i = 0; i < items.length; i++) {
+		if (items[i].type.indexOf('image') === -1) continue;
+		const file = items[i].getAsFile();
+		if (!file) continue;
+		mediaFileForm.file = file;
+		submitMediaFile();
+	}
+};
+
+onMounted(() => {
+	messageTextarea.value?.addEventListener('paste', onPaste);
+});
+
 const submitMediaFile = () => {
 	if (!mediaFileForm.file) return;
 	mediaFileForm.post(
