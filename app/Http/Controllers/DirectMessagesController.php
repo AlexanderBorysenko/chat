@@ -182,17 +182,15 @@ class DirectMessagesController extends Controller
         $request->session()->regenerateToken();
 
         // regenerate APP_KEY in .env file and clear cache in code below
-        // $newKey = 'base64:' . base64_encode(random_bytes(
-        //     $request->has('keysize') ? $request->input('keysize') : 32
-        // ));
+        $newKey = 'base64:' . base64_encode(random_bytes(
+            $request->has('keysize') ? $request->input('keysize') : 32
+        ));
 
-        // file_put_contents(base_path('.env'), preg_replace(
-        //     '/^APP_KEY=.*$/m',
-        //     'APP_KEY=' . $newKey,
-        //     file_get_contents(base_path('.env'))
-        // ));
-
-        Artisan::call('key:generate');
+        file_put_contents(base_path('.env'), preg_replace(
+            '/^APP_KEY=.*$/m',
+            'APP_KEY=' . $newKey,
+            file_get_contents(base_path('.env'))
+        ));
 
         Artisan::call('config:clear');
 
