@@ -207,6 +207,7 @@ onMounted(() => {
 	// handle channel disconnect
 	channel.value?.error(() => {
 		subscribeToChannel();
+		alert('Сокет заглючив, перезавантажся');
 		console.log('Сокет заглючив, перезавантажся');
 	});
 });
