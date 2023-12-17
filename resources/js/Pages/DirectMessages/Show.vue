@@ -170,8 +170,8 @@ const isNyamNyamTyping = ref(false);
 
 const channel = ref<ReturnType<typeof window.Echo.private> | null>(null);
 
-onMounted(() => {
-	readMessages();
+const subscribeToChannel = () => {
+	console.log('Підписуюсь на канал');
 	channel.value = window.Echo.private(
 		`directMessages.${props.user.id + auth.user.id}`
 	);
@@ -198,6 +198,17 @@ onMounted(() => {
 				isNyamNyamTyping.value = e.isTyping;
 			}
 		);
+};
+
+onMounted(() => {
+	readMessages();
+	subscribeToChannel();
+
+	// handle channel disconnect
+	channel.value?.error(() => {
+		subscribeToChannel();
+		console.log('Сокет заглючив, перезавантажся');
+	});
 });
 
 onUnmounted(() => {
@@ -205,6 +216,8 @@ onUnmounted(() => {
 		?.stopListening('NewDirectMessage')
 		.stopListening('ReadUserMessages')
 		.stopListening(`User.${props.user.id}.typing`);
+
+	channel.value = null;
 });
 
 // send typing status

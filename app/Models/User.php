@@ -41,7 +41,6 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-
     public function messages()
     {
         // select by sender_id and receiver_id

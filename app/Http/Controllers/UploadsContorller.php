@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Crypt;
+
 use Illuminate\Http\Request;
 
 class UploadsContorller extends Controller
@@ -14,7 +16,11 @@ class UploadsContorller extends Controller
         if (!file_exists($path)) {
             abort(404);
         }
-        $file = file_get_contents($path);
+
+        // Розшифрувати файл перед відображенням
+        $encryptedFile = file_get_contents($path);
+        $file = Crypt::decryptString($encryptedFile);
+
         $type = mime_content_type($path);
         return response($file, 200)->header('Content-Type', $type);
     }

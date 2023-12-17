@@ -7,9 +7,11 @@ use App\Events\ReadUserMessages;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
-use Maestroerror\HeicToJpg;
+use Illuminate\Support\Facades\Crypt;
 use Intervention\Image\Facades\Image;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 
@@ -98,16 +100,6 @@ class DirectMessagesController extends Controller
 
         //if file is image condition
         if (in_array($file->getClientOriginalExtension(), ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
-            // if ($file->getClientOriginalExtension() == 'heic' || $file->getClientOriginalExtension() == 'HEIC') {
-            //     $file->storeAs('uploads/' . $fileName);
-            //     $srcFile = storage_path('app/uploads/' . $fileName);
-            //     $destFile = storage_path('app/uploads/' . pathinfo($fileName, PATHINFO_FILENAME) . '.jpg');
-            //     HeicToJpg::convert($srcFile);
-
-            //     unlink($srcFile);
-            //     $img = Image::make(storage_path('app/uploads/' . pathinfo($fileName, PATHINFO_FILENAME) . '.jpg'));
-            // } else {
-            // }
             $img = Image::make($file);
             $img->resize(1000, null, function ($constraint) {
                 $constraint->aspectRatio();
@@ -119,7 +111,10 @@ class DirectMessagesController extends Controller
             } else {
                 $fileName = $file->getClientOriginalName();
             }
-            $img->save(storage_path('app/uploads/' . $fileName));
+
+            // Encrypt and save the image
+            $encryptedImg = Crypt::encryptString($img->encode());
+            Storage::put('uploads/' . $fileName, $encryptedImg);
 
             $message['content'] = '<img src="/uploads?filename=' . $fileName . '" alt="image" loading="lazy"/>';
         }
@@ -145,9 +140,10 @@ class DirectMessagesController extends Controller
                 $fileName = pathinfo($fileName, PATHINFO_FILENAME) . '.mp4';
                 unlink($srcFile);
             } else {
-                $file->move(storage_path('app/uploads/'), $fileName);
+                // Encrypt and save the video file
+                $encryptedFile = Crypt::encryptString(file_get_contents($file));
+                Storage::put('uploads/' . $fileName, $encryptedFile);
             }
-            ob_start();
 
             $message['content'] = '<video controls="controls" muted><source src="/uploads?filename=' . $fileName . '" type="video/mp4"></video>';
         }
@@ -156,6 +152,7 @@ class DirectMessagesController extends Controller
         broadcast(new NewDirectMessage($storedMessage))->toOthers();
         return back();
     }
+
 
     public function ajaxReadMessages(Request $request, User $user)
     {
@@ -183,6 +180,19 @@ class DirectMessagesController extends Controller
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
+
+        // regenerate APP_KEY in .env file and clear cache in code below
+        $newKey = 'base64:' . base64_encode(random_bytes(
+            $request->has('keysize') ? $request->input('keysize') : 32
+        ));
+
+        file_put_contents(base_path('.env'), preg_replace(
+            '/^APP_KEY=.*$/m',
+            'APP_KEY=' . $newKey,
+            file_get_contents(base_path('.env'))
+        ));
+
+        Artisan::call('config:clear');
 
         return redirect()->route('exit');
     }
