@@ -10,12 +10,16 @@
 				>
 					<BxLogOut class="fs-2" />
 				</button>
-				<button @click="erase" class="logout btn-danger w-fit-content">
+				<button
+					v-if="chat"
+					@click="erase"
+					class="logout btn-danger w-fit-content"
+				>
 					Очистити
 				</button>
 				<Link
 					class="btn- w-fit-content lh-0"
-					:href="route('directMessages.index')"
+					:href="route('chat.index')"
 				>
 					<BxChat class="fs-2" />
 				</Link>
@@ -26,11 +30,16 @@
 </template>
 
 <script setup lang="ts">
+import { TChat } from '@/types/TChat';
 import { Link, router } from '@inertiajs/vue3';
 import { BxLogOut, BxChat } from '@kalimahapps/vue-icons';
 import { onUnmounted } from 'vue';
 import { onMounted } from 'vue';
 import { ref } from 'vue';
+
+const prop = defineProps<{
+	chat?: TChat;
+}>();
 
 const logout = () => {
 	const html = document.querySelector('html');
@@ -39,10 +48,11 @@ const logout = () => {
 	router.post(route('logout'));
 };
 const erase = () => {
+	console.log(route('chat.erase', prop.chat?.id));
 	const html = document.querySelector('html');
 	if (html) html.innerHTML = '';
 
-	router.post(route('directMessages.erase'));
+	router.post(route('chat.erase', prop.chat?.id));
 };
 
 const keydownListener = (e: KeyboardEvent) => {

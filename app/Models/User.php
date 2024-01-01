@@ -41,20 +41,8 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function messages()
+    public function chats()
     {
-        // select by sender_id and receiver_id
-        return $this->hasMany(Message::class, 'sender_id')->orWhere('receiver_id', $this->id);
-    }
-
-    public function currentUserChat()
-    {
-        // return all messages where sender_id is current user Id and receiver_id is $the user id or where sender_id is $the user id and receiver_id is current user Id
-        return $this->hasMany(Message::class, 'sender_id')->where('receiver_id', auth()->id())->orWhere('sender_id', auth()->id())->where('receiver_id', $this->id);
-    }
-
-    public function currentUserUnreadMessages()
-    {
-        return $this->hasMany(Message::class, 'sender_id')->where('receiver_id', auth()->id())->where('read', false);
+        return $this->belongsToMany(Chat::class)->withTimestamps();
     }
 }

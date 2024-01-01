@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\DirectMessagesController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\UploadsContorller;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -18,24 +20,20 @@ use Inertia\Inertia;
 */
 
 Route::middleware('auth')->group(function () {
-    // Route::get('/', HomeController::class)->name('home');
+    Route::get('/', [ChatController::class, 'index'])->name('chat.index');
+    Route::get('/chat/{chat}', [ChatController::class, 'show'])->name('chat.show');
+    Route::post('/chat/ajaxReadMessages/{chat}', [ChatController::class, 'ajaxReadMessages'])->name('chat.ajaxReadMessages');
 
-    // Route::get('/post/create', HomeController::class)->name('home');
+    Route::post('/message/store/{chat}', [MessageController::class, 'store'])->name('message.store');
+    Route::post('/message/storeMediaFile/{chat}', [MessageController::class, 'storeMediaFile'])->name('message.storeMediaFile');
 
-    // Route::get('/directs', [DirectMessagesController::class, 'index'])->name('directMessages.index');
-    Route::get('/', [DirectMessagesController::class, 'index'])->name('directMessages.index');
-    Route::get('/direct/{user}', [DirectMessagesController::class, 'show'])->name('directMessages.show');
-    Route::post('/direct/store/{user}', [DirectMessagesController::class, 'store'])->name('directMessages.store');
-    Route::post('/direct/storeMediaFileMessage/{user}', [DirectMessagesController::class, 'storeMediaFileMessage'])->name('directMessages.storeMediaFileMessage');
+    Route::get('/uploads', [UploadsContorller::class, 'show'])->name('upload.show');
 
-
-    Route::post('/ajaxReadMessages/{user}', [DirectMessagesController::class, 'ajaxReadMessages'])->name('directMessages.ajaxReadMessages');
     // ajaxReadMessages
 
-    Route::post('/erase', [DirectMessagesController::class, 'erase'])->name('directMessages.erase');
+    Route::post('/erase/{chat}', [ChatController::class, 'erase'])->name('chat.erase');
 
     // uploads
-    Route::get('/uploads', [UploadsContorller::class, 'show'])->name('upload.show');
 });
 
 Route::get('/exit', function () {

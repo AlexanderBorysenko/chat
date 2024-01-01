@@ -1,29 +1,29 @@
 <template>
 	<div
 		class="message"
-		v-if="message.type === 'media'"
-		:class="{ 'is-mine': isMine }"
+		:class="{ 'is-mine': isMine, 'p-8': message.type === 'text' }"
 	>
 		<button
 			class="btn ml-auto w-100 text-center flex align-center justify-center"
+			v-if="message.type === 'image' || message.type === 'video'"
 			@click="isContentVisible = !isContentVisible"
 		>
 			{{ isContentVisible ? 'Сховати Моську' : 'Показати Моську' }}
 		</button>
-		<div
-			v-html="message.content"
-			v-if="isContentVisible"
+		<img
+			:src="`/uploads?filename=${message.content}`"
+			v-if="isContentVisible && message.type === 'image'"
 			class="lh-0"
-		></div>
-		<p class="date" v-if="!isMine">
-			{{ new Date(message.created_at).toLocaleString() }}
-		</p>
-		<p class="date" v-if="isMine">
-			{{ message.read ? 'Прочитано' : 'Не прочитано' }}
-		</p>
-	</div>
-	<div class="message pv-8 ph-12" v-else :class="{ 'is-mine': isMine }">
-		<div v-html="message.content"></div>
+		/>
+		<video
+			:src="`/uploads?filename=${message.content}`"
+			v-if="isContentVisible && message.type === 'video'"
+			class="lh-0"
+			controls
+			muted
+			playsinline
+		></video>
+		<div v-if="message.type === 'text'" v-html="message.content"></div>
 		<p class="date" v-if="!isMine">
 			{{ new Date(message.created_at).toLocaleString() }}
 		</p>

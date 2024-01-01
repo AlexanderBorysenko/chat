@@ -3,40 +3,37 @@
 namespace App\Http\Controllers;
 
 use App\Events\NewDirectMessage;
-use App\Events\ReadUserMessages;
 use App\Models\Chat;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Crypt;
 use Intervention\Image\Facades\Image;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 
-class DirectMessagesController extends Controller
+class MessageController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
-        $users = User::where('id', '!=', auth()->id())->withCount('currentUserUnreadMessages')->get();
-        return Inertia::render('DirectMessages/Index', [
-            'users' => $users,
-        ]);
+        //
     }
 
-    public function show(User $user)
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
     {
-        $messages = $user->currentUserChat;
-        // ->with('sender')->between(auth()->id(), $user->id)->get();
-        return Inertia::render('DirectMessages/Show', [
-            'messages' => $messages,
-            'user' => $user,
-        ]);
+        //
     }
 
-    public function store(Request $request, User $user)
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request, Chat $chat)
     {
         $message = $request->validate([
             'content' => 'required|string',
@@ -65,9 +62,9 @@ class DirectMessagesController extends Controller
         );
 
         $message['content'] = nl2br($message['content']);
-
+        $message['type'] = 'text';
         $message['sender_id'] = auth()->id();
-        $message['receiver_id'] = $user->id;
+        $message['chat_id'] = $chat->id;
 
         $storedMessage = Message::create($message);
 
@@ -75,12 +72,8 @@ class DirectMessagesController extends Controller
         return back();
     }
 
-    // accepts file
-    // compress the image too 1000px width, auto height and store it in the public folder.
-    // add <img src="path/to/image" alt="image" loading="lazy"/> to the message content
-    public function storeMediaFileMessage(Request $request, User $user)
+    public function storeMediaFile(Request $request, Chat $chat)
     {
-        // get input file mime type
         $request->validate([
             'file' => 'required|file|max:100000',
         ]);
@@ -89,15 +82,10 @@ class DirectMessagesController extends Controller
         $message = [
             'content' => 'Формат файла не підтримується',
             'sender_id' => auth()->id(),
-            'receiver_id' => $user->id,
-            'type' => 'media',
+            'chat_id' => $chat->id,
         ];
 
-        if (file_exists(storage_path('app/uploads/' . $file->getClientOriginalName()))) {
-            $fileName = $file->getClientOriginalName() . '-' . time() . '.' . $file->getClientOriginalExtension();
-        } else {
-            $fileName = $file->getClientOriginalName();
-        }
+        $fileName = substr(md5(microtime()), rand(0, 26), 5) . "." . $file->getClientOriginalExtension();
 
         //if file is image condition
         if (in_array($file->getClientOriginalExtension(), ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
@@ -107,17 +95,14 @@ class DirectMessagesController extends Controller
             })->orientate();
 
             // ensure file name is unique in the storage folder
-            if (file_exists(storage_path('app/uploads/' . $file->getClientOriginalName()))) {
-                $fileName = $file->getClientOriginalName() . '-' . time() . '.' . $file->getClientOriginalExtension();
-            } else {
-                $fileName = $file->getClientOriginalName();
-            }
+            $fileName = substr(md5(microtime()), rand(0, 26), 5) . "." . $file->getClientOriginalExtension();
 
             // Encrypt and save the image
             $encryptedImg = Crypt::encryptString($img->encode());
             Storage::put('uploads/' . $fileName, $encryptedImg);
 
-            $message['content'] = '<img src="/uploads?filename=' . $fileName . '" alt="image" loading="lazy"/>';
+            $message['type'] = 'image';
+            $message['content'] = $fileName;
         }
 
         if (in_array($file->getClientOriginalExtension(), ['mp4', 'mov'])) {
@@ -146,7 +131,8 @@ class DirectMessagesController extends Controller
                 Storage::put('uploads/' . $fileName, $encryptedFile);
             }
 
-            $message['content'] = '<video controls="controls" muted><source src="/uploads?filename=' . $fileName . '" type="video/mp4"></video>';
+            $message['type'] = 'video';
+            $message['content'] = $fileName;
         }
 
         $storedMessage = Message::create($message);
@@ -154,50 +140,35 @@ class DirectMessagesController extends Controller
         return back();
     }
 
-
-    public function ajaxReadMessages(Request $request, Chat $chat)
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
     {
-        Message::where('chat_id', $chat->id)->where('sender_id', '!=', auth()->id())->update(['read' => true]);
-
-        broadcast(new ReadUserMessages($chat))->toOthers();
-        return response()->json(['success' => true]);
+        //
     }
 
-    public function erase(Request $request)
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
     {
-        Message::truncate();
+        //
+    }
 
-        // delete all files in the uploads folder
-        $files = glob(storage_path('app/uploads/*'));
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        //
+    }
 
-        foreach ($files as $file) {
-            if (is_file($file)) {
-                unlink($file);
-            }
-        }
-
-        Auth::guard('web')->logout();
-
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
-
-        // regenerate APP_KEY in .env file and clear cache in code below
-        $newKey = 'base64:' . base64_encode(
-            random_bytes(
-                $request->has('keysize') ? $request->input('keysize') : 32
-            )
-        );
-
-        file_put_contents(base_path('.env'), preg_replace(
-            '/^APP_KEY=.*$/m',
-            'APP_KEY=' . $newKey,
-            file_get_contents(base_path('.env'))
-        )
-        );
-
-        Artisan::call('config:clear');
-
-        return redirect()->route('exit');
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
     }
 }

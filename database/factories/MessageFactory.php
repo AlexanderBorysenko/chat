@@ -18,7 +18,7 @@ class MessageFactory extends Factory
     {
         return [
             'sender_id' => 1,
-            'receiver_id' => 2,
+            'chat_id' => 1,
             'content' => $this->faker->sentence,
             'read' => false,
         ];

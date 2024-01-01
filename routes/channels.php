@@ -18,8 +18,8 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 });
 
 Broadcast::channel(
-    'directMessages.{unique_code}',
-    function ($user, $unique_code) {
-        return true;
+    'chat.{chat_id}',
+    function ($user, $chat_id) {
+        return $user->chats->contains($chat_id);
     }
 );

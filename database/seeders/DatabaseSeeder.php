@@ -24,21 +24,18 @@ class DatabaseSeeder extends Seeder
             'name' => 'kycia',
             'password' => bcrypt('0680024530'),
         ]);
-        Message::factory()->count(3)->create([
-            'sender_id' => $kotyk->id,
-            'receiver_id' => $kycia->id,
+        $pirozok = User::factory()->create([
+            'name' => 'pirozok',
+            'password' => bcrypt('pirozok'),
         ]);
-        Message::factory()->count(3)->create([
-            'sender_id' => $kycia->id,
-            'receiver_id' => $kotyk->id,
-        ]);
-        Message::factory()->count(3)->create([
-            'sender_id' => $kotyk->id,
-            'receiver_id' => $kycia->id,
-        ]);
-        Message::factory()->count(3)->create([
-            'sender_id' => $kycia->id,
-            'receiver_id' => $kotyk->id,
-        ]);
+
+        $chat = $kotyk->chats()->create();
+        $chat->users()->attach($kycia->id);
+
+        $chat = $kotyk->chats()->create();
+        $chat->users()->attach($pirozok->id);
+
+        $chat = $kycia->chats()->create();
+        $chat->users()->attach($pirozok->id);
     }
 }

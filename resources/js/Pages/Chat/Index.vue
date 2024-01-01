@@ -1,21 +1,16 @@
 <template>
 	<AppWrapper>
-		<div class="">
-			<UserDirectMessagesCard
-				v-for="user in props.users"
-				:key="user.id"
-				:user="user"
-			/>
-		</div>
+		<ChatCard v-for="chat in chats" :key="chat.id" :chat="chat" />
 	</AppWrapper>
 </template>
 
 <script setup lang="ts">
+import ChatCard from '@/Components/ChatCard.vue';
 import UserDirectMessagesCard from '@/Components/UserDirectMessagesCard.vue';
 import AppWrapper from '@/Layouts/AppWrapper.vue';
-import { TUser } from '@/types/TUser';
+import { TChat } from '@/types/TChat';
 const props = defineProps<{
-	users: TUser[];
+	chats: TChat[];
 }>();
 </script>
 

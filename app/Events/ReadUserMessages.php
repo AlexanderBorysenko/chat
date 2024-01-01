@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\Chat;
 use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -18,11 +19,11 @@ class ReadUserMessages implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public $user;
+    public $chat;
     public $readingUser;
-    public function __construct(User $user)
+    public function __construct(Chat $chat)
     {
-        $this->user = $user;
+        $this->chat = $chat;
         $this->readingUser = auth()->user();
     }
 
@@ -34,7 +35,7 @@ class ReadUserMessages implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('directMessages.' . $this->user->id + auth()->id()),
+            new PrivateChannel('chat.' . $this->chat->id),
         ];
     }
 }
