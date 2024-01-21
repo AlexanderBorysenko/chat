@@ -53,11 +53,13 @@ const isContentVisible = ref(false);
 	border-radius: 4px;
 	position: relative;
 	line-height: 130%;
+	box-shadow: 1px 1px 4px gainsboro;
 	&:not(:last-child) {
 		margin-bottom: 8px;
 	}
 	&:not(.is-mine) {
 		padding-bottom: 2px;
+		box-shadow: 1px -1px 4px gainsboro;
 	}
 }
 .is-mine {

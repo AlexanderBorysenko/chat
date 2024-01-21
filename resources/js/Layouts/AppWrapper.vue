@@ -1,9 +1,7 @@
 <template>
 	<div class="app-wrapper">
 		<div class="inner flex flex-column">
-			<div
-				class="header ui-panel sticky flex align-center justify-space-between gap-1"
-			>
+			<div class="header ui-panel sticky flex align-center gap-1">
 				<button
 					@click="logout"
 					class="logout btn-danger w-fit-content lh-0"
@@ -19,6 +17,12 @@
 				</button>
 				<Link
 					class="btn- w-fit-content lh-0"
+					:href="route('music.index')"
+				>
+					<IoMusicalNotes class="fs-2" />
+				</Link>
+				<Link
+					class="btn- w-fit-content lh-0"
 					:href="route('chat.index')"
 				>
 					<BxChat class="fs-2" />
@@ -32,7 +36,7 @@
 <script setup lang="ts">
 import { TChat } from '@/types/TChat';
 import { Link, router } from '@inertiajs/vue3';
-import { BxLogOut, BxChat } from '@kalimahapps/vue-icons';
+import { BxLogOut, BxChat, IoMusicalNotes } from '@kalimahapps/vue-icons';
 import { onUnmounted } from 'vue';
 import { onMounted } from 'vue';
 import { ref } from 'vue';
@@ -68,16 +72,16 @@ onUnmounted(() => {
 });
 
 const viewportHeight = ref('100vh');
-const resizeListener = () => {
-	viewportHeight.value = `${window.innerHeight}px`;
-};
-onMounted(() => {
-	resizeListener();
-	window.addEventListener('resize', resizeListener);
-});
-onUnmounted(() => {
-	window.removeEventListener('resize', resizeListener);
-});
+// const resizeListener = () => {
+// 	viewportHeight.value = `${window.innerHeight}px`;
+// };
+// onMounted(() => {
+// 	resizeListener();
+// 	window.addEventListener('resize', resizeListener);
+// });
+// onUnmounted(() => {
+// 	window.removeEventListener('resize', resizeListener);
+// });
 </script>
 
 <style scoped lang="scss">
@@ -86,8 +90,7 @@ onUnmounted(() => {
 	height: 100vh;
 	height: v-bind(viewportHeight);
 	padding: 4px;
-	background: url(../../asset-images/background.jpg) no-repeat center center
-		fixed;
+	background: url(../../asset-images/background-4.png) center center fixed;
 	background-size: cover;
 }
 .header {
@@ -101,13 +104,15 @@ onUnmounted(() => {
 	margin-left: auto;
 	margin-right: auto;
 	border-radius: 8px;
-	background: rgba($color: #fff2fdb8, $alpha: 0.72);
 	border: 1px solid #fff;
-	backdrop-filter: blur(2px);
+	background: rgba(255, 255, 255, 0.7);
+	backdrop-filter: blur(10px);
 	border-radius: 8px;
+	flex-wrap: nowrap;
 	// box-shadow: 0 0 10px rgba($color: #ccccff, $alpha: 0.3);
 }
 .logout {
+	margin-right: auto;
 	svg {
 		line-height: 0;
 	}

@@ -17,7 +17,6 @@ return new class extends Migration {
             $table->text('content');
             $table->boolean('read')->default(false);
             $table->string('type')->default('text');
-            $table->softDeletes();
             $table->timestamps();
         });
     }

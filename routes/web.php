@@ -1,9 +1,8 @@
 <?php
 
 use App\Http\Controllers\ChatController;
-use App\Http\Controllers\DirectMessagesController;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\MusicController;
 use App\Http\Controllers\UploadsContorller;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -28,6 +27,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/message/storeMediaFile/{chat}', [MessageController::class, 'storeMediaFile'])->name('message.storeMediaFile');
 
     Route::get('/uploads', [UploadsContorller::class, 'show'])->name('upload.show');
+
+    // Music index, creaete and store routes
+    Route::get('/music', [MusicController::class, 'index'])->name('music.index');
+    Route::get('/music/create', [MusicController::class, 'create'])->name('music.create');
+    Route::post('/music/store', [MusicController::class, 'store'])->name('music.store');
+    Route::delete('/music/{music}', [MusicController::class, 'destroy'])->name('music.delete');
 
     // ajaxReadMessages
 

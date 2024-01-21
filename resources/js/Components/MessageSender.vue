@@ -200,7 +200,7 @@ const emit = defineEmits({
 	position: absolute;
 	bottom: 100%;
 	left: 8px;
-	background: #ffadc9;
+	background: var(--primary-color);
 	padding: 4px 8px;
 	border-radius: 4px;
 	color: #fff;

@@ -1,20 +1,21 @@
 [class*='btn'] {
 	display: block;
-	background-color: #ffadc9;
+	background-color: var(--primary-color);
 	color: #fff;
 	padding: 0.5rem 0.75rem;
 	border-radius: 5px;
 	border: none;
 	cursor: pointer;
 	transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+	box-shadow: 0px 0 4px #0000006b;
 	&:hover {
-		background-color: #f189cb;
+		background-color: var(--primary-hover-color);
 	}
 }
 .btn-danger {
-	background: #fe5f55;
+	background: var(--danger-color);
 	&:hover {
-		background: #f189cb;
+		background: var(--danger-hover-color);
 	}
 }
 .btn-regular {

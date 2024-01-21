@@ -1,14 +1,17 @@
 .form-control {
 	display: block;
-	border: 1px solid #f8f8ff;
 	border-radius: 0.25rem;
 	padding: 0.5rem 0.75rem;
 	line-height: 1.5;
 	background-color: #fff;
 	background-clip: padding-box;
 	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+	background: #eeecd8;
+	box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.17);
 	&:focus {
-		background-color: #fff;
+		background: #eeecd8;
+
+		// background-color: #fff;
 		border-color: #f8f8ff;
 		outline: 0;
 		box-shadow: 0 0 0 0.2rem rgba(248, 248, 255, 0.25);

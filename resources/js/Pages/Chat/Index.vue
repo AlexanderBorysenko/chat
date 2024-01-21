@@ -1,6 +1,13 @@
 <template>
 	<AppWrapper>
-		<ChatCard v-for="chat in chats" :key="chat.id" :chat="chat" />
+		<div class="p-8">
+			<ChatCard
+				v-for="chat in chats"
+				:key="chat.id"
+				:chat="chat"
+				class="mb-8"
+			/>
+		</div>
 	</AppWrapper>
 </template>
 

@@ -29,6 +29,7 @@ const props = defineProps<{
 
 <style scoped lang="scss">
 .user-card {
-	background: rgba($color: #fae6fa, $alpha: 0.3);
+	background: rgba($color: #fff, $alpha: 0.5);
+	border-radius: 8px;
 }
 </style>
