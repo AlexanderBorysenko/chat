@@ -12,7 +12,7 @@ class MusicController extends Controller
     {
         return inertia('Music/Index')->with([
             //order by id desc
-            'music' => Music::all()->sortByDesc('id'),
+            'music' => Music::all()->sortBy('id')
         ]);
     }
 
