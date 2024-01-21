@@ -11,7 +11,8 @@ class MusicController extends Controller
     public function index()
     {
         return inertia('Music/Index')->with([
-            'music' => Music::all(),
+            //order by id desc
+            'music' => Music::all()->sortByDesc('id'),
         ]);
     }
 
