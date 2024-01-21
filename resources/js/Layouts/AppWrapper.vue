@@ -72,13 +72,13 @@ onUnmounted(() => {
 });
 
 const viewportHeight = ref('100vh');
-// const resizeListener = () => {
-// 	viewportHeight.value = `${window.innerHeight}px`;
-// };
-// onMounted(() => {
-// 	resizeListener();
-// 	window.addEventListener('resize', resizeListener);
-// });
+const resizeListener = () => {
+	viewportHeight.value = `${window.innerHeight}px`;
+};
+onMounted(() => {
+	resizeListener();
+	// 	window.addEventListener('resize', resizeListener);
+});
 // onUnmounted(() => {
 // 	window.removeEventListener('resize', resizeListener);
 // });
