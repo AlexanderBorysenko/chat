@@ -73,15 +73,17 @@ onUnmounted(() => {
 
 const viewportHeight = ref('100vh');
 const resizeListener = () => {
+	// if is mobile return fale
+	if (window.innerWidth < 440) return;
 	viewportHeight.value = `${window.innerHeight}px`;
 };
 onMounted(() => {
 	resizeListener();
-	// 	window.addEventListener('resize', resizeListener);
+	window.addEventListener('resize', resizeListener);
 });
-// onUnmounted(() => {
-// 	window.removeEventListener('resize', resizeListener);
-// });
+onUnmounted(() => {
+	window.removeEventListener('resize', resizeListener);
+});
 </script>
 
 <style scoped lang="scss">

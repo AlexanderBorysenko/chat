@@ -26,6 +26,7 @@
         "laravel-echo": "^1.15.3",
         "pusher-js": "^8.3.0",
         "vite-plugin-purgecss": "^0.2.12",
-        "vite-plugin-sass-glob-import": "^2.0.0"
+        "vite-plugin-sass-glob-import": "^2.0.0",
+        "vue3-audio-player": "^1.0.7"
     }
 }
