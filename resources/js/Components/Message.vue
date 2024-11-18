@@ -48,7 +48,8 @@ const isContentVisible = ref(false);
 <style scoped lang="scss">
 .message {
 	width: fit-content;
-	max-width: 450px;
+	max-width: 28.125rem;
+	word-wrap: break-word;
 	background: rgba($color: #fff, $alpha: 0.8);
 	border-radius: 4px;
 	position: relative;
