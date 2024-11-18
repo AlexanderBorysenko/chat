@@ -19,7 +19,6 @@ import { ref } from 'vue';
 const props = defineProps<{
 	images: string[];
 }>();
-console.log(props.images);
 
 const correctPassword = 'kotyky';
 const password = ref('');
@@ -31,11 +30,14 @@ const password = ref('');
 	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 	padding: 1rem;
 	gap: 0.5rem;
+	flex: 1;
+	overflow: auto;
 }
 .gallery-item {
 	border-radius: 8px;
 	overflow: hidden;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	min-height: 25rem;
 	img {
 		width: 100%;
 		height: 100%;

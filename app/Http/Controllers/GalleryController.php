@@ -13,7 +13,7 @@ class GalleryController extends Controller
         });
 
         return inertia('Gallery/Index')->with([
-            'images' => $allImagesInGallery,
+            'images' => $allImagesInGallery->reverse(),
         ]);
     }
 
@@ -25,13 +25,11 @@ class GalleryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'files.*' => 'required|image',
+            'file' => 'required|image',
         ]);
 
-        foreach ($request->file('files') as $file) {
-            $file->store('public/gallery');
-        }
+        $request->file('file')->store('public/gallery');
 
-        return redirect()->route('gallery.create')->with('success', 'Images uploaded successfully');
+        return redirect()->route('gallery.create')->with('success', 'Image created successfully');
     }
 }
