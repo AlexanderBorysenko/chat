@@ -25,11 +25,13 @@ class GalleryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'file' => 'required|image',
+            'files.*' => 'required|image',
         ]);
 
-        $request->file('file')->store('public/gallery');
+        foreach ($request->file('files') as $file) {
+            $file->store('public/gallery');
+        }
 
-        return redirect()->route('gallery.create')->with('success', 'Image created successfully');
+        return redirect()->route('gallery.create')->with('success', 'Images uploaded successfully');
     }
 }

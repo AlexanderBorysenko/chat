@@ -6,8 +6,9 @@
 				type="file"
 				@change="onFileChange"
 				accept="image/*"
+				multiple
 			/>
-			<div>{{ form.errors.file }}</div>
+			<div>{{ form.errors.files }}</div>
 			<button class="btn" @click="submit">Submit</button>
 		</div>
 	</AppWrapper>
@@ -18,15 +19,15 @@ import AppWrapper from '@/Layouts/AppWrapper.vue';
 import { useForm } from '@inertiajs/vue3';
 
 const form = useForm<{
-	file: File | null;
+	files: File[];
 }>({
-	file: null
+	files: []
 });
 
 const onFileChange = (event: Event) => {
 	const target = event.target as HTMLInputElement;
-	const file: File = (target.files as FileList)[0];
-	form.file = file;
+	const files: FileList = target.files as FileList;
+	form.files = Array.from(files);
 };
 
 const submit = () => {
