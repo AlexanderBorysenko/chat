@@ -1,11 +1,7 @@
 <template>
 	<AppWrapper>
-		<div class="gallery">
-			<input
-				type="password"
-				:value="password"
-				@input="(e:Event) => password = (e.target as HTMLInputElement).value"
-			/>
+		<input type="password" v-model="password" />
+		<div class="gallery" v-if="password === correctPassword">
 			<div
 				v-for="image in props.images"
 				:key="image"
@@ -33,7 +29,8 @@ const password = ref('');
 .gallery {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-	gap: 1rem;
+	padding: 1rem;
+	gap: 0.5rem;
 }
 .gallery-item {
 	border-radius: 8px;
