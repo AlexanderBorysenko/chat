@@ -3,7 +3,7 @@
 		<input type="password" v-model="password" />
 		<div class="gallery" v-if="password === correctPassword">
 			<div
-				v-for="image in props.images"
+				v-for="image in props.images.reverse()"
 				:key="image"
 				class="gallery-item"
 			>
