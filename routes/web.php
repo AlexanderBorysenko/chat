@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\MusicController;
 use App\Http\Controllers\UploadsContorller;
@@ -33,6 +34,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/music/create', [MusicController::class, 'create'])->name('music.create');
     Route::post('/music/store', [MusicController::class, 'store'])->name('music.store');
     Route::delete('/music/{music}', [MusicController::class, 'destroy'])->name('music.delete');
+
+    // Gallery index, create and store routes
+    Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index');
+    Route::get('/gallery/create', [GalleryController::class, 'create'])->name('gallery.create');
+    Route::post('/gallery/store', [GalleryController::class, 'store'])->name('gallery.store');
 
     // ajaxReadMessages
 

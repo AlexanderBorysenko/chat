@@ -17,6 +17,12 @@
 				</button>
 				<Link
 					class="btn- w-fit-content lh-0"
+					:href="route('gallery.index')"
+				>
+					<IoImages class="fs-2" />
+				</Link>
+				<Link
+					class="btn- w-fit-content lh-0"
 					:href="route('music.index')"
 				>
 					<IoMusicalNotes class="fs-2" />

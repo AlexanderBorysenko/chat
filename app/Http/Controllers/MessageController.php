@@ -42,19 +42,26 @@ class MessageController extends Controller
         // wrap content links in anchor tags (get link title from meta tags)
         function get_title($url)
         {
-            $str = file_get_contents($url);
+            try {
+                $str = file_get_contents($url);
+            } catch (\Exception $e) {
+                return '[Посиланнячко]';
+            }
             $str = mb_convert_encoding($str, 'UTF-8', mb_detect_encoding($str, 'UTF-8, ISO-8859-1', true));
-
         }
         $message['content'] = preg_replace_callback(
             '/(https?:\/\/[^\s]+)/m',
             function ($matches) {
                 $url = $matches[0];
-                $html = file_get_contents($url);
-                $html = mb_convert_encoding($html, 'UTF-8', mb_detect_encoding($html, 'UTF-8, ISO-8859-1', true));
+                try {
+                    $html = file_get_contents($url);
+                    $html = mb_convert_encoding($html, 'UTF-8', mb_detect_encoding($html, 'UTF-8, ISO-8859-1', true));
+                    preg_match("/\<title\>(.*)\<\/title\>/", $html, $foundedTitle);
+                    $title = count($foundedTitle) ? $foundedTitle[1] : 'Посиланнячко';
+                } catch (\Exception $e) {
+                    $title = '[Посиланнячко]';
+                }
 
-                preg_match("/\<title\>(.*)\<\/title\>/", $html, $foundedTitle);
-                $title = count($foundedTitle) ? $foundedTitle[1] : 'Посиланнячко';
 
                 return '<a href="' . $url . '" target="_blank">' . $title . '</a>';
             },
