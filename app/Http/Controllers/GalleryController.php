@@ -13,7 +13,7 @@ class GalleryController extends Controller
         });
 
         return inertia('Gallery/Index')->with([
-            'images' => $allImagesInGallery->reverse(),
+            'images' => $allImagesInGallery,
         ]);
     }
 
