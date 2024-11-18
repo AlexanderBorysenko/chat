@@ -2,11 +2,7 @@
 	<AppWrapper>
 		<input type="password" v-model="password" />
 		<div class="gallery" v-if="password === correctPassword">
-			<div
-				v-for="image in props.images.reverse()"
-				:key="image"
-				class="gallery-item"
-			>
+			<div v-for="image in images" :key="image" class="gallery-item">
 				<img :src="image" loading="lazy" alt="Gallery Image" />
 			</div>
 		</div>
@@ -15,11 +11,11 @@
 
 <script setup lang="ts">
 import AppWrapper from '@/Layouts/AppWrapper.vue';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 const props = defineProps<{
 	images: string[];
 }>();
-
+const images = computed(() => props.images.reverse());
 const correctPassword = 'kotyky';
 const password = ref('');
 </script>
