@@ -7,7 +7,6 @@
 				@input="(e:Event) => password = (e.target as HTMLInputElement).value"
 			/>
 			<div
-				v-if="password === correctPassword"
 				v-for="image in props.images"
 				:key="image"
 				class="gallery-item"
@@ -24,6 +23,7 @@ import { ref } from 'vue';
 const props = defineProps<{
 	images: string[];
 }>();
+console.log(props.images);
 
 const correctPassword = 'kotyky';
 const password = ref('');

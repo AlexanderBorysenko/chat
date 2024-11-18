@@ -42,7 +42,12 @@
 <script setup lang="ts">
 import { TChat } from '@/types/TChat';
 import { Link, router } from '@inertiajs/vue3';
-import { BxLogOut, BxChat, IoMusicalNotes } from '@kalimahapps/vue-icons';
+import {
+	BxLogOut,
+	BxChat,
+	IoMusicalNotes,
+	IoImages
+} from '@kalimahapps/vue-icons';
 import { onUnmounted } from 'vue';
 import { onMounted } from 'vue';
 import { ref } from 'vue';
